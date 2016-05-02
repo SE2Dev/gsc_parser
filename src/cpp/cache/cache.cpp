@@ -138,6 +138,11 @@ int ScriptCacheEntry::ParseStreamBuffer(analysis_arg_s* arg)
 	if(arg->ast_callback)
 	{
 		arg->ast_callback(AST);
+
+		//		
+		// Prevents node.js from waiting until the parser exits to handle stdout data
+		//
+		fflush(stdout);
 	}
 	
 	entry->UnlockAST();
