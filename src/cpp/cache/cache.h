@@ -45,6 +45,7 @@ public:
 	void FlushStreamBuffer(void);
 	
 	int PostAnalysisJob(job_func_t callback = NULL);
+	int PostAnalysisJob_Sync(job_func_t callback = NULL);
 };
 
 void Cache_List();

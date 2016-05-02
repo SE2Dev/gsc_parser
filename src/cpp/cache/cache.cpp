@@ -183,3 +183,16 @@ int ScriptCacheEntry::PostAnalysisJob(job_func_t callback)
 	job->Register();
 	return 0;
 }
+
+int ScriptCacheEntry::PostAnalysisJob_Sync(job_func_t callback)
+{	
+	//
+	// Cleaned up by the ParseStreamBuffer function
+	//
+	analysis_arg_s* arg = new analysis_arg_s;
+	arg->entry = this;
+	arg->ast_callback = callback;
+	
+	ScriptCacheEntry::ParseStreamBuffer(arg);
+	return 0;
+}
