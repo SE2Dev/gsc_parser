@@ -20,13 +20,13 @@
 
 #include <stdlib.h>
 
-int Cmd_Symbols_ASTCallback_f(void* _arg)
+int Cmd_Symbols_ASTCallback_f(Symbol* AST, void* _arg)
 {
-	Symbol* ast = (Symbol*)_arg;
-	for(Symbol* node = ast->Children(); node; node = node->NextElem())
+	for(Symbol* node = AST->Children(); node; node = node->NextElem())
 	{
 		node->PrintSymbol();
 	} 
+	printf("JOB_COMPLETE\n");
 	return 0;
 }
 
@@ -74,7 +74,7 @@ int Cmd_Symbols_f(int argc, char** argv)
 		entry->UpdateStreamBuffer(file_size, stdin);
 	}
 
-	entry->PostAnalysisJob(Cmd_Symbols_ASTCallback_f);
+	entry->PostAnalysisJob_Sync(Cmd_Symbols_ASTCallback_f, NULL);
 	return 0;
 }
 

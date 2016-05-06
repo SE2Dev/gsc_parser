@@ -5,10 +5,13 @@
 
 class ScriptCacheEntry;
 
+typedef int (*analysis_callback_t)(Symbol* AST, void* argv);
+
 struct analysis_arg_s
 {
 	ScriptCacheEntry* entry;
-	job_func_t ast_callback;
+	analysis_callback_t callback_func;
+	void* callback_argv;
 };
 
 class ScriptCacheEntry
@@ -44,8 +47,10 @@ public:
 	size_t UpdateStreamBuffer(size_t len, FILE* h);
 	void FlushStreamBuffer(void);
 	
-	int PostAnalysisJob(job_func_t callback = NULL);
-	int PostAnalysisJob_Sync(job_func_t callback = NULL);
+	//int PostAnalysisJob(analysis_callback_t callback = NULL);
+	int PostAnalysisJob(analysis_callback_t callback, void* arg);
+	//int PostAnalysisJob_Sync(analysis_callback_t callback = NULL);
+	int PostAnalysisJob_Sync(analysis_callback_t callback, void* argv_s);
 };
 
 void Cache_List();

@@ -6,7 +6,7 @@
 
 #include "../util/llist.h"
 
-typedef int (*job_func_t)(void* args);
+typedef int (*job_func_t)(void* argv);
 
 enum JOB_FLAGS
 {

@@ -20,10 +20,9 @@
 
 #include <stdlib.h>
 
-int Cmd_Tree_ASTCallback_f(void* _arg)
+int Cmd_Tree_ASTCallback_f(Symbol* AST, void* _arg)
 {
-	Symbol* ast = (Symbol*)_arg;
-	ast->PrintInfoRecursive();
+	AST->PrintInfoRecursive();
 	return 0;
 }
 
@@ -71,6 +70,6 @@ int Cmd_Tree_f(int argc, char** argv)
 		entry->UpdateStreamBuffer(file_size, stdin);
 	}
 
-	entry->PostAnalysisJob(Cmd_Tree_ASTCallback_f);
+	entry->PostAnalysisJob(Cmd_Tree_ASTCallback_f, NULL);
 	return 0;
 }

@@ -135,10 +135,10 @@ int ScriptCacheEntry::ParseStreamBuffer(analysis_arg_s* arg)
 	Symbol* old = entry->ast;
 	entry->ast = AST;
 	
-	if(arg->ast_callback)
+	if(arg->callback_func)
 	{
-		arg->ast_callback(AST);
-
+		arg->callback_func(AST, arg->callback_argv);
+		
 		//		
 		// Prevents node.js from waiting until the parser exits to handle stdout data
 		//
@@ -169,14 +169,15 @@ void ScriptCacheEntry::FlushAST()
 	UnlockAST();
 }
 
-int ScriptCacheEntry::PostAnalysisJob(job_func_t callback)
+int ScriptCacheEntry::PostAnalysisJob(analysis_callback_t callback, void* argv_s)
 {	
 	//
 	// Cleaned up by the ParseStreamBuffer function
 	//
 	analysis_arg_s* arg = new analysis_arg_s;
 	arg->entry = this;
-	arg->ast_callback = callback;
+	arg->callback_func = callback;
+	arg->callback_argv = argv_s;
 	
 	if(!CL_WatchMode_IsEnabled())
 	{
@@ -189,14 +190,15 @@ int ScriptCacheEntry::PostAnalysisJob(job_func_t callback)
 	return 0;
 }
 
-int ScriptCacheEntry::PostAnalysisJob_Sync(job_func_t callback)
+int ScriptCacheEntry::PostAnalysisJob_Sync(analysis_callback_t callback, void* argv_s)
 {	
 	//
 	// Cleaned up by the ParseStreamBuffer function
 	//
 	analysis_arg_s* arg = new analysis_arg_s;
 	arg->entry = this;
-	arg->ast_callback = callback;
+	arg->callback_func = callback;
+	arg->callback_argv = argv_s;
 	
 	ScriptCacheEntry::ParseStreamBuffer(arg);
 	return 0;
