@@ -28,6 +28,16 @@ Symbol::~Symbol()
 	this->next = NULL;
 }
 
+SYMBOL_TYPE Symbol::Type(void) const
+{
+	return this->type;
+}
+
+Range Symbol::Location(void) const
+{
+	return this->location;
+}
+
 void Symbol::AddChild(Symbol* child)
 {
 	if(!this->children)

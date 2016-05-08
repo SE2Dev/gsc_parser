@@ -47,6 +47,11 @@ Expression::~Expression()
 {
 }
 
+OPERATOR_TYPE Expression::Operator(void) const
+{
+	return this->op_type;
+}
+
 void Expression::PrintInfo() const
 {
 	printf("%s with %d children at %d(%d) - %d(%d), op '%s'\n",

@@ -20,11 +20,46 @@
 
 #include <stdlib.h>
 
+//
+// Provide all variables defined by assignment expressions
+//
+void Cmd_Symbols_PrintVars(Symbol* symbol, Position* pos)
+{
+	for(Symbol* node = symbol->Children(); node; node = node->NextElem())
+	{
+		if(node->Type() == S_TYPE_EXPRESSION && ((Expression*)node)->Operator() == OP_TYPE_ASSIGN)
+		{
+			Symbol* left_group = node->Children();
+			Symbol* left = left_group->Children();
+			if(left->Type() == S_TYPE_IDENTIFIER)
+			{
+				left->PrintSymbol();
+			}
+		}
+		
+		Cmd_Symbols_PrintVars(node, pos);
+	}
+}
+
 int Cmd_Symbols_ASTCallback_f(Symbol* AST, void* _arg)
 {
+	Position* pos = (Position*)_arg;
+	
 	for(Symbol* node = AST->Children(); node; node = node->NextElem())
 	{
 		node->PrintSymbol();
+		
+		if(pos && node->Type() == S_TYPE_FUNCTION_DECL)
+		{
+			if(node->Location().start <= *pos && node->Location().end >= *pos)
+			{
+				// Provide the function arguments
+				((Function*)node)->PrintArgs();
+				
+				// Provide all variables defined within that function
+				Cmd_Symbols_PrintVars(node, pos);
+			}
+		}
 	} 
 	printf("JOB_COMPLETE\n");
 	return 0;
@@ -32,11 +67,11 @@ int Cmd_Symbols_ASTCallback_f(Symbol* AST, void* _arg)
 
 /*
 	USAGE:	symbols [filepath]
-			symbols [filepath fileSize -d fileData]
+			symbols [filepath line:char fileSize fileData] //loc -1:-1 displays all functions in the file
 */
 int Cmd_Symbols_f(int argc, char** argv)
 {
-	if(argc < 2)
+	if(argc < 2 || argc == 3)
 	{
 		fprintf(stderr, "Error: Incorrect number of arguments\n");
 		return 1;
@@ -44,6 +79,7 @@ int Cmd_Symbols_f(int argc, char** argv)
 	
 	FILE* f = NULL;
 	
+	Position* pos = NULL;
 	ScriptCacheEntry* entry = Cache_Update(argv[1]);
 	
 	if(argc == 2)
@@ -65,16 +101,24 @@ int Cmd_Symbols_f(int argc, char** argv)
 		entry->UpdateStreamBuffer(file_size, f);
 		fclose(f);
 	}
-	else if( argc == 3 && CL_WatchMode_IsEnabled() )
+	else if( argc == 4 && CL_WatchMode_IsEnabled() )
 	{
 		char* end = NULL;
-		long int file_size = strtol(argv[2], &end, 10);
+		
+		long int line = strtol(argv[2], &end, 10);
+		long int character = strtol(end + 1, &end, 10);
+		
+		pos = new Position(line, character);
+		
+		long int file_size = strtol(argv[3], &end, 10);
+		
 		printf("Waiting for %ld bytes on stdin\n", file_size);
+		printf("Using position %ld:%ld\n", line, character);
 		
 		entry->UpdateStreamBuffer(file_size, stdin);
 	}
 
-	entry->PostAnalysisJob_Sync(Cmd_Symbols_ASTCallback_f, NULL);
+	entry->PostAnalysisJob_Sync(Cmd_Symbols_ASTCallback_f, pos);
 	return 0;
 }
 

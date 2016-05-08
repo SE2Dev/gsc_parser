@@ -41,6 +41,9 @@ class Symbol : public LList<Symbol>
 		
 		virtual ~Symbol();
 		
+		SYMBOL_TYPE Type(void) const;
+		Range Location(void) const;
+		
 		void AddChild(Symbol* child);
 		void FreeChildren(void);
 		

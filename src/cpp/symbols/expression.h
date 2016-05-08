@@ -17,5 +17,7 @@ public:
 	
 	~Expression(void);
 	
+	OPERATOR_TYPE Operator(void) const;
+	
 	void PrintInfo(void) const;
 };

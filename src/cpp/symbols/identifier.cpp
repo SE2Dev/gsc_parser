@@ -32,3 +32,19 @@ void Identifier::PrintInfo() const
 		location.end.character,
 		this->value);
 }
+
+void Identifier::PrintSymbol() const
+{
+	//
+	// type|name|location[|details]
+	// By default do not provide type specific info
+	//
+	printf("%s|%s|%d %d %d %d|%s\n",
+		SYMBOL_TYPE_STRING(type),
+		this->value,
+		location.start.line,
+		location.start.character,
+		location.end.line,
+		location.end.character,
+		"... (variable)");
+}

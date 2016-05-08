@@ -7,7 +7,6 @@
 #include "../parser/gsc.yy.h"
 #include "../sys/sys_worker.h"
 
-
 HashTable<ScriptCacheEntry> script_cache;
 
 ScriptCacheEntry* Cache_Update(const char* key)

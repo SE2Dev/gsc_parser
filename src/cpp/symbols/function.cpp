@@ -20,6 +20,16 @@ Function::~Function()
 	//delete this->identifier;
 }
 
+void Function::PrintArgs() const
+{
+	Symbol* args = this->children->NextElem();
+	
+	for(Symbol* arg = args->Children(); arg; arg = arg->NextElem())
+	{
+		arg->PrintSymbol();
+	}
+}
+
 void Function::PrintInfo() const
 {
 	printf("%s with %d children at %d(%d) - %d(%d), name '%s'\n",

@@ -11,6 +11,7 @@ class Function : public Symbol
 		
 		~Function(void);
 		
+		void PrintArgs() const;
 		void PrintInfo() const;
 		void PrintSymbol() const;
 };
