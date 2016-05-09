@@ -197,7 +197,7 @@ int ScriptCacheEntry::PostAnalysisJob_Sync(analysis_callback_t callback, void* a
 	analysis_arg_s* arg = new analysis_arg_s;
 	arg->entry = this;
 	arg->callback_func = callback;
-	arg->callback_argv = argv_s;
+	arg->callback_argv = argv_s; //TODO: prevent this from leaking
 	
 	ScriptCacheEntry::ParseStreamBuffer(arg);
 	return 0;

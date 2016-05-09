@@ -18,12 +18,14 @@
 #include "../../cache/cache.h"
 #include "../../fs/fs.h"
 
+#include "../../util/hash_table.h"
+
 #include <stdlib.h>
 
 //
 // Provide all variables defined by assignment expressions
 //
-void Cmd_Symbols_PrintVars(Symbol* symbol, Position* pos)
+void Cmd_Symbols_PrintVars(Symbol* symbol, Position* pos, HashTable<Symbol*>* hash_table)
 {
 	for(Symbol* node = symbol->Children(); node; node = node->NextElem())
 	{
@@ -33,17 +35,29 @@ void Cmd_Symbols_PrintVars(Symbol* symbol, Position* pos)
 			Symbol* left = left_group->Children();
 			if(left->Type() == S_TYPE_IDENTIFIER)
 			{
-				left->PrintSymbol();
+				Identifier* id = (Identifier*)left;
+				Symbol** s = hash_table->Add(id->value);
+				if(*s == NULL)
+				{
+					*s = id;
+					left->PrintSymbol();
+				}
 			}
 		}
 		
-		Cmd_Symbols_PrintVars(node, pos);
+		Cmd_Symbols_PrintVars(node, pos, hash_table);
 	}
 }
 
 int Cmd_Symbols_ASTCallback_f(Symbol* AST, void* _arg)
 {
 	Position* pos = (Position*)_arg;
+	
+	//
+	// Upon deletion this hash table deletes dynamically allocated pointers to symbols
+	// but not the symbols themselves
+	//
+	HashTable<Symbol*>* hash_table = new HashTable<Symbol*>();
 	
 	for(Symbol* node = AST->Children(); node; node = node->NextElem())
 	{
@@ -57,10 +71,13 @@ int Cmd_Symbols_ASTCallback_f(Symbol* AST, void* _arg)
 				((Function*)node)->PrintArgs();
 				
 				// Provide all variables defined within that function
-				Cmd_Symbols_PrintVars(node, pos);
+				Cmd_Symbols_PrintVars(node, pos, hash_table);
 			}
 		}
-	} 
+	}
+	
+	delete hash_table;
+	
 	printf("JOB_COMPLETE\n");
 	return 0;
 }

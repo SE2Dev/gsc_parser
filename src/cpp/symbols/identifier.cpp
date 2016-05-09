@@ -39,12 +39,14 @@ void Identifier::PrintSymbol() const
 	// type|name|location[|details]
 	// By default do not provide type specific info
 	//
-	printf("%s|%s|%d %d %d %d|%s\n",
+	printf("%s|%s|%d %d %d %d|%s at line %d, char %d\n",
 		SYMBOL_TYPE_STRING(type),
 		this->value,
 		location.start.line,
 		location.start.character,
 		location.end.line,
 		location.end.character,
-		"... (variable)");
+		"var",
+		location.start.line,
+		location.start.character);
 }
