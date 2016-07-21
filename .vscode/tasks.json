@@ -46,6 +46,9 @@
 		{
 			"taskName": "test-file",
 			"isTestCommand": true
+		},
+		{
+			"taskName": "clean"
 		}
 	]
 }
