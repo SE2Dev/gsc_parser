@@ -259,7 +259,7 @@ int Arg_ParseCmdLine(char* cmdLine, ArgParsedInfo* out_info)
 					}
 				}
 				
-				if((last_was_space = is_space))
+				if((last_was_space = !!is_space))
 				{
 					cl[i] = '\0';
 				}
