@@ -5,13 +5,14 @@
 *.obj
 *.suo
 *.sdf
-/vcpp/Debug
-/vcpp/Release
+*.opensdf
 
-bin/parser
+bin/
 obj/
 src/cpp/parser
 
 *.db
 *.db-shm
 *.db-wal
+
+/gdf
