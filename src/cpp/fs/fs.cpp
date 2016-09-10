@@ -30,8 +30,9 @@ long int FS_FileSize(const char* path)
 
 long int _FS_Iterate(const char* path, fs_iterator_callback_t file_f, fs_iterator_callback_t dir_f, bool recursive)
 {
+	WIN32_FIND_DATAA file_data = { NULL };
 	HANDLE h_dir;
-	if( (dir = FindFirstFileA(qpath, &file_data)) == INVALID_HANDLE_VALUE )
+	if( (h_dir = FindFirstFileA(path, &file_data)) == INVALID_HANDLE_VALUE )
 	{
 		return 0;
 	}
@@ -47,7 +48,7 @@ long int _FS_Iterate(const char* path, fs_iterator_callback_t file_f, fs_iterato
 			continue;
 		}
 		
-		sprintf(entry_path, "%s%c%s", path, fs_dir_separator, entry.cFileName);
+		sprintf_s(entry_path, 1024, "%s%c%s", path, fs_dir_separator, entry.cFileName);
 		
 		if(entry.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 		{
@@ -65,11 +66,11 @@ long int _FS_Iterate(const char* path, fs_iterator_callback_t file_f, fs_iterato
 		{
 			file_f(entry_path);
 		}
-	} while(FindNextFileA(dir, &file_data);
+	} while(FindNextFileA(h_dir, &file_data));
 	
 	delete[] entry_path;
 	
-	closedir(h_dir);
+	FindClose(h_dir);
 	return 0;
 }
 
