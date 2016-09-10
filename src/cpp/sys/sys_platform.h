@@ -22,6 +22,17 @@
 
 W32_WARNING_DISABLE(4996) // Disable POSIX Name Deprecation
 
+#ifndef _SSIZE_T_DEFINED
+#ifdef _WIN64
+typedef signed __int64    ssize_t;
+#else  /* _WIN64 */
+typedef _W64 signed int   ssize_t;
+#endif  /* _WIN64 */
+#define _SSIZE_T_DEFINED
+#endif 
+
+ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+
 #else //LINUX
 
 #include <unistd.h>	// required for isatty (LINUX)
