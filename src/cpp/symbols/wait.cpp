@@ -10,6 +10,8 @@ Wait::Wait(Expression* expr, YYLTYPE loc) : expr(expr)
 	this->type = S_TYPE_STATEMENT_WAIT;
 	this->location = loc;
 	this->children = (expr) ? expr : NULL;
+
+	this->UpdateChildren();
 }
 
 Wait::~Wait()

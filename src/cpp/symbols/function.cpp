@@ -95,6 +95,7 @@ void Call::SetCaller(Expression* caller)
 		}
 		
 		this->children =  caller;
+		this->UpdateChildren();
 	}
 	this->flags |= CALL_FLAGS_EXPLICIT_CALLER;
 }

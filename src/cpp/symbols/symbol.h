@@ -33,7 +33,11 @@ class Symbol : public LList<Symbol>
 		//
 		Symbol* children;
 		
-		Range location;		
+		Range location;
+
+		// Ensure that all children of this symbol
+		// have the correct parent pointer value
+		void UpdateChildren(void);
 		
 	public:
 		Symbol(void);

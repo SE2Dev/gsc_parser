@@ -68,6 +68,14 @@ Symbol* Symbol::Children(void) const
 	return this->children;
 }
 
+void Symbol::UpdateChildren(void)
+{
+	for(Symbol* c = this->children; c; c = c->NextElem())
+	{
+		c->parent = this;
+	}
+}
+
 void Symbol::PrintInfo() const
 {
 	printf("%s with %d children at %d(%d) - %d(%d)\n",

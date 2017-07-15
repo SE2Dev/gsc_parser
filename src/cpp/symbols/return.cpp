@@ -10,6 +10,8 @@ Return::Return(Expression* expr, YYLTYPE loc) : expr(expr)
 	this->type = S_TYPE_STATEMENT_RETURN;
 	this->location = loc;
 	this->children = (expr) ? expr : NULL;
+
+	this->UpdateChildren();
 }
 
 Return::~Return()
