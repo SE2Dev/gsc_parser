@@ -21,9 +21,9 @@ Reference::~Reference()
 {
 }
 
-void Reference::PrintInfo() const
+void Reference::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d), file '%s', func '%s'\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d), file '%s', func '%s'\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,

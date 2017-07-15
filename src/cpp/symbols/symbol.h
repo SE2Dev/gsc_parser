@@ -23,7 +23,7 @@ class Symbol : public LList<Symbol>
 {
 	private:
 		// Only used internally to keep track of the tree state
-		void PrintInfoRecursive(std::vector<const Symbol*>& stack) const;
+		void PrintInfoRecursive(FILE* os, std::vector<const Symbol*>& stack) const;
 
 	protected:
 		SYMBOL_TYPE type;
@@ -58,9 +58,9 @@ class Symbol : public LList<Symbol>
 		
 		Symbol* Children(void) const;
 		
-		virtual void PrintInfo() const;
-		void PrintInfoRecursive(void) const;
-		virtual void PrintSymbol() const;
+		virtual void PrintInfo(FILE* os = stdout) const;
+		void PrintInfoRecursive(FILE* os = stdout) const;
+		virtual void PrintSymbol(FILE* os = stdout) const;
 		
 		void _debug_override_type(SYMBOL_TYPE type);
 };

@@ -20,19 +20,19 @@ Function::~Function()
 	//delete this->identifier;
 }
 
-void Function::PrintArgs() const
+void Function::PrintArgs(FILE* os) const
 {
 	Symbol* args = this->children->NextElem();
 	
 	for(Symbol* arg = args->Children(); arg; arg = arg->NextElem())
 	{
-		arg->PrintSymbol();
+		arg->PrintSymbol(os);
 	}
 }
 
-void Function::PrintInfo() const
+void Function::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d), name '%s'\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d), name '%s'\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,
@@ -45,13 +45,13 @@ void Function::PrintInfo() const
 //
 // Used to provide symbol data to CoD-Sense
 //
-void Function::PrintSymbol() const
+void Function::PrintSymbol(FILE* os) const
 {
 	//
 	// type|name|location[|details]
 	// By default do not provide type specific info
 	//
-	printf("%s|%s|%d %d %d %d|%s\n",
+	fprintf(os, "%s|%s|%d %d %d %d|%s\n",
 		SYMBOL_TYPE_STRING(type),
 		this->identifier->value,
 		location.start.line,
@@ -100,9 +100,9 @@ void Call::SetCaller(Expression* caller)
 	this->flags |= CALL_FLAGS_EXPLICIT_CALLER;
 }
 
-void Call::PrintInfo() const
+void Call::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d), flags 0x%X\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d), flags 0x%X\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,

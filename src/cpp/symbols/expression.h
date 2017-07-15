@@ -19,5 +19,5 @@ public:
 	
 	OPERATOR_TYPE Operator(void) const;
 	
-	void PrintInfo(void) const;
+	void PrintInfo(FILE* os=stdout) const;
 };

@@ -52,9 +52,9 @@ OPERATOR_TYPE Expression::Operator(void) const
 	return this->op_type;
 }
 
-void Expression::PrintInfo() const
+void Expression::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d), op '%s'\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d), op '%s'\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,

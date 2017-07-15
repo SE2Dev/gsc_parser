@@ -3,18 +3,18 @@
 Symbol::Symbol(void) : type(S_TYPE_NONE), prev(NULL), next(NULL), children(NULL)
 {
 	this->SetOwner(this);
-	//printf("SYMBOL CTOR %s\n", SYMBOL_TYPE_STRING(type));
+	//fprintf(os, "SYMBOL CTOR %s\n", SYMBOL_TYPE_STRING(type));
 }
 
 Symbol::Symbol(YYLTYPE loc) : type(S_TYPE_NONE), prev(NULL), next(NULL), children(NULL), location(loc)
 {
 	this->SetOwner(this);
-	//printf("CTOR %s\n", SYMBOL_TYPE_STRING(type));
+	//fprintf(os, "CTOR %s\n", SYMBOL_TYPE_STRING(type));
 }
 
 Symbol::~Symbol()
 {
-	/*printf("~%s with %d children at %d(%d) - %d(%d)\n",
+	/*fprintf(os, "~%s with %d children at %d(%d) - %d(%d)\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,
@@ -76,9 +76,9 @@ void Symbol::UpdateChildren(void)
 	}
 }
 
-void Symbol::PrintInfo() const
+void Symbol::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d)\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d)\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,
@@ -90,13 +90,13 @@ void Symbol::PrintInfo() const
 //
 // Used to provide symbol data to CoD-Sense
 //
-void Symbol::PrintSymbol() const
+void Symbol::PrintSymbol(FILE* os) const
 {
 	//
 	// type|location[|name|details]
 	// By default do not provide type specific info
 	//
-	//printf("%s|%d %d %d %d\n",
+	//fprintf(os, "%s|%d %d %d %d\n",
 	//	SYMBOL_TYPE_STRING(type),
 	//	location.start.line,
 	//	location.start.character,
@@ -104,7 +104,7 @@ void Symbol::PrintSymbol() const
 	//	location.end.character);
 }
 
-void Symbol::PrintInfoRecursive(std::vector<const Symbol*>& stack) const
+void Symbol::PrintInfoRecursive(FILE* os, std::vector<const Symbol*>& stack) const
 {
 	// Iterate over all symbols on the stack from oldest to newest
 	
@@ -112,32 +112,32 @@ void Symbol::PrintInfoRecursive(std::vector<const Symbol*>& stack) const
 	{
 		if(stack[i] == this->parent)
 		{
-			printf("%s", this->NextElem() ? "├── " : "└── ");
+			fprintf(os, "%s", this->NextElem() ? "├── " : "└── ");
 		}
 		else if (i+1 < stack.size() && stack[i+1]->NextElem())
 		{
-			printf("%s", "│   ");
+			fprintf(os, "%s", "│   ");
 		}
 		else
 		{
-			printf("    ");
+			fprintf(os, "    ");
 		}
 	}
 
-	this->PrintInfo();
+	this->PrintInfo(os);
 
 	stack.push_back(this);
 	for(Symbol* c = this->children; c; c = c->NextElem())
 	{
-		c->PrintInfoRecursive(stack);
+		c->PrintInfoRecursive(os, stack);
 	}
 	stack.pop_back();
 }
 
-void Symbol::PrintInfoRecursive(void) const
+void Symbol::PrintInfoRecursive(FILE* os) const
 {
 	std::vector<const Symbol*> stack;
-	this->PrintInfoRecursive(stack);
+	this->PrintInfoRecursive(os, stack);
 }
 
 void Symbol::_debug_override_type(SYMBOL_TYPE type)

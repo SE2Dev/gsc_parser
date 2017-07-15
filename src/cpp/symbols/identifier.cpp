@@ -21,9 +21,9 @@ Identifier::~Identifier()
 	free((void*)this->value);
 }
 
-void Identifier::PrintInfo() const
+void Identifier::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d), name '%s'\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d), name '%s'\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,
@@ -33,13 +33,13 @@ void Identifier::PrintInfo() const
 		this->value);
 }
 
-void Identifier::PrintSymbol() const
+void Identifier::PrintSymbol(FILE* os) const
 {
 	//
 	// type|name|location[|details]
 	// By default do not provide type specific info
 	//
-	printf("%s|%s|%d %d %d %d|%s at line %d, char %d\n",
+	fprintf(os, "%s|%s|%d %d %d %d|%s at line %d, char %d\n",
 		SYMBOL_TYPE_STRING(type),
 		this->value,
 		location.start.line,

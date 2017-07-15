@@ -12,6 +12,6 @@ class Identifier : public Symbol
 		
 		virtual ~Identifier(void);
 		
-		void PrintInfo() const;
-		void PrintSymbol() const;
+		void PrintInfo(FILE* os = stdout) const;
+		void PrintSymbol(FILE* os = stdout) const;
 };

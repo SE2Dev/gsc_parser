@@ -18,9 +18,9 @@ Return::~Return()
 {
 }
 
-void Return::PrintInfo() const
+void Return::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d)\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d)\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,

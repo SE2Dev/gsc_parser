@@ -18,9 +18,9 @@ Literal::~Literal()
 	value = NULL;
 }
 
-void Literal::PrintInfo() const
+void Literal::PrintInfo(FILE* os) const
 {
-	printf("%s with %d children at %d(%d) - %d(%d), name '%s'\n",
+	fprintf(os, "%s with %d children at %d(%d) - %d(%d), name '%s'\n",
 		SYMBOL_TYPE_STRING(type),
 		this->children ? this->children->Size() + 1 : 0,
 		location.start.line,
