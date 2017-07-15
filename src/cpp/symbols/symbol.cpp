@@ -104,19 +104,40 @@ void Symbol::PrintSymbol() const
 	//	location.end.character);
 }
 
-void Symbol::PrintInfoRecursive(int indentLevel) const
+void Symbol::PrintInfoRecursive(std::vector<const Symbol*>& stack) const
 {
-	this->PrintInfo();
+	// Iterate over all symbols on the stack from oldest to newest
 	
+	for(unsigned int i = 0; i < stack.size(); i++)
+	{
+		if(stack[i] == this->parent)
+		{
+			printf("%s", this->NextElem() ? "├── " : "└── ");
+		}
+		else if (i+1 < stack.size() && stack[i+1]->NextElem())
+		{
+			printf("%s", "│   ");
+		}
+		else
+		{
+			printf("    ");
+		}
+	}
+
+	this->PrintInfo();
+
+	stack.push_back(this);
 	for(Symbol* c = this->children; c; c = c->NextElem())
 	{
-		for(int i = 0; i < indentLevel; i++)
-		{
-			printf("│   ");
-		}
-		printf("%s", c->NextElem() ? "├── " : "└── ");
-		c->PrintInfoRecursive(indentLevel + 1);
+		c->PrintInfoRecursive(stack);
 	}
+	stack.pop_back();
+}
+
+void Symbol::PrintInfoRecursive(void) const
+{
+	std::vector<const Symbol*> stack;
+	this->PrintInfoRecursive(stack);
 }
 
 void Symbol::_debug_override_type(SYMBOL_TYPE type)

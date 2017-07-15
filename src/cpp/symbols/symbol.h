@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <string.h>
+#include <vector>
 
 #include "../parser/gsc.tab.hpp"
 
@@ -20,6 +21,10 @@
 //
 class Symbol : public LList<Symbol>
 {
+	private:
+		// Only used internally to keep track of the tree state
+		void PrintInfoRecursive(std::vector<const Symbol*>& stack) const;
+
 	protected:
 		SYMBOL_TYPE type;
 	
@@ -54,7 +59,7 @@ class Symbol : public LList<Symbol>
 		Symbol* Children(void) const;
 		
 		virtual void PrintInfo() const;
-		void PrintInfoRecursive(int indentLevel = 0) const;
+		void PrintInfoRecursive(void) const;
 		virtual void PrintSymbol() const;
 		
 		void _debug_override_type(SYMBOL_TYPE type);
