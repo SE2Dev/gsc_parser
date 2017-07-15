@@ -52,18 +52,21 @@ $(BIN_FILE): $(OBJ_DIR)/$(PARSER_SRC_OUT).o $(OBJ_DIR)/$(LEXER_SRC_OUT).o $(OBJS
 	@mkdir --parents $(dir $(BIN_DIR)/$(BIN_FILE))
 	@$(CXX) $(CXXFLAGS) $^ -o $(BIN_DIR)/$(BIN_FILE)
 
+.DEFAULT_GOAL:=$(BIN_FILE)
+
+.PHONY: clean
 clean:
 	@rm -rf $(BIN_DIR)/$(BIN_FILE)
 	@rm -rf $(DEP_DIR)
 	@rm -rf $(OBJ_DIR)
 	@mkdir -p src/cpp/parser && rm -f -r src/cpp/parser/*
 
-default: $(BIN_FILE)
-	
+.PHONY: test
 test:
 	@$(MAKE) $(MAKE_CHILD_OPTIONS)
 	@gnome-terminal -x ./bin/parser
 
+.PHONY: test-file
 test-file:
 	@$(MAKE) $(MAKE_CHILD_OPTIONS)
 	@gnome-terminal -x ./bin/test.sh
