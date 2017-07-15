@@ -16,6 +16,8 @@ SRCS=$(shell find $(SRC_DIR) $(SRC_PATTERN))
 OBJS=$(patsubst $(SRC_DIR)%,$(OBJ_DIR)%.o,$(basename $(SRCS)))
 DEPS=$(patsubst $(SRC_DIR)%,$(DEP_DIR)%.d,$(basename $(SRCS)))
 
+BIN_FILE:=$(BIN_DIR)/$(BIN_FILE)
+
 -include $(DEPS)
 
 PARSER_SRC=src/gsc.ypp
@@ -48,15 +50,16 @@ $(OBJ_DIR)/%.o: $(DEP_DIR)/%.d
 	@$(CXX) $(CXXFLAGS) -c -o $@ $(filter $(SRCS),$^)
 
 $(BIN_FILE): $(OBJ_DIR)/$(PARSER_SRC_OUT).o $(OBJ_DIR)/$(LEXER_SRC_OUT).o $(OBJS)
-	@echo "[LINK] $(BIN_DIR)/$(BIN_FILE)"
-	@mkdir --parents $(dir $(BIN_DIR)/$(BIN_FILE))
-	@$(CXX) $(CXXFLAGS) $^ -o $(BIN_DIR)/$(BIN_FILE)
+	@echo "[LINK] $(BIN_FILE)"
+	@mkdir --parents $(dir $(BIN_FILE))
+	@$(CXX) $(CXXFLAGS) $^ -o $(BIN_FILE)
 
+# Make the executable binary by default
 .DEFAULT_GOAL:=$(BIN_FILE)
 
 .PHONY: clean
 clean:
-	@rm -rf $(BIN_DIR)/$(BIN_FILE)
+	@rm -rf $(BIN_FILE)
 	@rm -rf $(DEP_DIR)
 	@rm -rf $(OBJ_DIR)
 	@mkdir -p src/cpp/parser && rm -f -r src/cpp/parser/*
