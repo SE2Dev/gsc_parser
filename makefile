@@ -57,6 +57,9 @@ $(BIN_FILE): $(OBJ_DIR)/$(PARSER_SRC_OUT).o $(OBJ_DIR)/$(LEXER_SRC_OUT).o $(OBJS
 # Make the executable binary by default
 .DEFAULT_GOAL:=$(BIN_FILE)
 
+.PHONY: build
+build: $(BIN_FILE)
+
 .PHONY: clean
 clean:
 	@rm -rf $(BIN_FILE)
@@ -67,9 +70,9 @@ clean:
 .PHONY: test
 test:
 	@$(MAKE) $(MAKE_CHILD_OPTIONS)
-	@gnome-terminal -x ./bin/parser
+	$(BIN_FILE)
 
 .PHONY: test-file
 test-file:
 	@$(MAKE) $(MAKE_CHILD_OPTIONS)
-	@gnome-terminal -x ./bin/test.sh
+	@$(BIN_FILE) tree ./bin/test.gsc
