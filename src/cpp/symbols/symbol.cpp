@@ -76,6 +76,11 @@ void Symbol::UpdateChildren(void)
 	}
 }
 
+Symbol* Symbol::Parent(void) const
+{
+	return this->parent;
+}
+
 void Symbol::PrintInfo(FILE* os) const
 {
 	fprintf(os, "%s with %d children at %d(%d) - %d(%d)\n",

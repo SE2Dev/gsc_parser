@@ -57,6 +57,7 @@ class Symbol : public LList<Symbol>
 		void FreeChildren(void);
 		
 		Symbol* Children(void) const;
+		Symbol* Parent(void) const;
 		
 		virtual void PrintInfo(FILE* os = stdout) const;
 		void PrintInfoRecursive(FILE* os = stdout) const;
