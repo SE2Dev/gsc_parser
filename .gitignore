@@ -1,5 +1,6 @@
 .vscode/keybindings.json
 .vscode/c_cpp_properties.json
+.vs
 
 *.o
 *.obj
