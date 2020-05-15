@@ -10,7 +10,8 @@
 
 bin/
 obj/
-src/cpp/parser
+src/cpp/parser/*
+!src/cpp/parser/placeholder
 
 *.db
 *.db-shm
